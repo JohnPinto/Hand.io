@@ -1,1 +1,6 @@
 .vscode
+/MPU6050/build
+data.csv
+data1.csv
+handio_data.csv
+new_data.csv
