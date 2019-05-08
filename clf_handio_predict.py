@@ -10,8 +10,8 @@ import serial
 from sklearn import model_selection
 from sklearn.neighbors import KNeighborsClassifier
 
-#portPath = "/dev/ttyACM0"
-#baud = 38400
+portPath = "/dev/ttyACM1"
+baud = 57600
 
 # prepare configuration for cross validation test harness
 seed = 100
