@@ -57,13 +57,13 @@ int16_t gx, gy, gz;
 // uncomment "OUTPUT_READABLE_ACCELGYRO" if you want to see a tab-separated
 // list of the accel X/Y/Z and then gyro X/Y/Z values in decimal. Easy to read,
 // not so easy to parse, and slow(er) over UART.
-#define OUTPUT_READABLE_ACCELGYRO
+//#define OUTPUT_READABLE_ACCELGYRO
 
 // uncomment "OUTPUT_BINARY_ACCELGYRO" to send all 6 axes of data as 16-bit
 // binary, one right after the other. This is very fast (as fast as possible
 // without compression or data loss), and easy to parse, but impossible to read
 // for a human.
-//#define OUTPUT_BINARY_ACCELGYRO
+#define OUTPUT_BINARY_ACCELGYRO
 
 
 #define LED_PIN 13
@@ -82,7 +82,7 @@ void setup() {
     // initialize serial communication
     // (38400 chosen because it works as well at 8MHz as it does at 16MHz, but
     // it's really up to you depending on your project)
-    Serial.begin(38400);
+    Serial.begin(115200);
 
     // initialize device
     //Serial.println("Initializing I2C devices...");
@@ -143,12 +143,14 @@ void loop() {
       #endif
 
       #ifdef OUTPUT_BINARY_ACCELGYRO
+        Serial.write("$");      
         Serial.write((uint8_t)(ax >> 8)); Serial.write((uint8_t)(ax & 0xFF));
         Serial.write((uint8_t)(ay >> 8)); Serial.write((uint8_t)(ay & 0xFF));
         Serial.write((uint8_t)(az >> 8)); Serial.write((uint8_t)(az & 0xFF));
         Serial.write((uint8_t)(gx >> 8)); Serial.write((uint8_t)(gx & 0xFF));
         Serial.write((uint8_t)(gy >> 8)); Serial.write((uint8_t)(gy & 0xFF));
         Serial.write((uint8_t)(gz >> 8)); Serial.write((uint8_t)(gz & 0xFF));
+        Serial.write("\n");
       #endif
       
       // blink LED to indicate activity

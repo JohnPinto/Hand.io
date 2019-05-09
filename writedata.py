@@ -1,34 +1,78 @@
 #!/usr/bin/env python
 import serial
+from serial import tools
+from serial.tools import list_ports
 import time
+import struct
 
-portPath = "/dev/ttyACM0"
-baud = 38400
+baud = 115200
 
-def createSerial(portPath, baud_rate):
-    return serial.Serial(portPath, baud_rate)
+class SerialObject():
+    port = None
+    ser = None
 
-def serialOutput(serial):
-    data = serial.readline().decode('utf-8')
-    data = data.strip()
-    sep = data.split(",")
-    #print(sep)
-    return sep
+    def __init__(self, baud):
+        self.baud = baud
+        
+        self.__getPort()
 
-def flushSerial(serial_port):
-    #serial_port.setDTR(False)
-    #time.sleep(1)
-    serial_port.flushInput()
-    serial_port.flushOutput()
-    #time.sleep(1)
-    #serial_port.setDTR(True)
+        print("Serial port:", self.port)
+        print("Baud:", baud)
 
-serial_obj = createSerial(portPath, baud)
-flushSerial(serial_obj)
-while 1:
-    #data = serialOutput(serial_obj)
-    print(serial_obj.readline().decode('utf-8'))
-    flushSerial(serial_obj)
+        self.ser = serial.Serial(self.port, baud)
     
+    def __getPort(self):
+        serial.tools.list_ports.grep
 
-#print(data[0])
+        try:
+            search = serial.tools.list_ports.grep(True)
+            next(search)
+        except Exception:
+            port_list = serial.tools.list_ports.comports()
+            for p in port_list:
+                if 'arduino' in p.description.lower():
+                    self.port = p.device
+                    break
+            else:
+                    self.port = port_list[-1].device
+
+    def __flushSerial(self):
+        self.ser.flush()
+        self.ser.reset_input_buffer()
+        self.ser.reset_output_buffer()
+
+    def serialOutputText(self):
+        self.__flushSerial()
+        data = self.ser.readline().decode("utf-8")
+
+        if data[:3] == "a/g" and data[-1:] == "\n":
+            print(data)
+
+    def dumpOutputText(self):
+        self.__flushSerial()
+        print(self.ser.readline().decode("utf-8"))
+    
+    def serialOutputBin(self):
+        self.__flushSerial()
+        data = self.ser.readline()
+
+        if data[:1] == b"$" and data[-1:] == b"\n":
+            #data[]
+            print(data)
+
+    def dumpOutputBin(self):
+        self.__flushSerial()
+        print(self.ser.readline())
+
+def main():
+    ser = SerialObject(baud)
+
+    while 1:
+        #ser.dumpOutputText()
+        #ser.serialOutputText()
+        ser.serialOutputBin()
+        #ser.dumpOutputBin()
+
+if __name__ == '__main__':
+    main()
+
