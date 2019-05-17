@@ -57,19 +57,20 @@ int16_t gx, gy, gz;
 // uncomment "OUTPUT_READABLE_ACCELGYRO" if you want to see a tab-separated
 // list of the accel X/Y/Z and then gyro X/Y/Z values in decimal. Easy to read,
 // not so easy to parse, and slow(er) over UART.
-//#define OUTPUT_READABLE_ACCELGYRO
+#define OUTPUT_READABLE_ACCELGYRO
 
 // uncomment "OUTPUT_BINARY_ACCELGYRO" to send all 6 axes of data as 16-bit
 // binary, one right after the other. This is very fast (as fast as possible
 // without compression or data loss), and easy to parse, but impossible to read
 // for a human.
-#define OUTPUT_BINARY_ACCELGYRO
+//#define OUTPUT_BINARY_ACCELGYRO
 
 
 #define LED_PIN 13
 #define BUTTON_PIN 3
 int buttonState = 0;
 bool blinkState = false;
+uint8_t packet[8] = { '$', 0, 0, 0, 0, 0, 0,'\n' };
 
 void setup() {
     // join I2C bus (I2Cdev library doesn't do this automatically)
@@ -133,13 +134,14 @@ void loop() {
     if (buttonState == HIGH){
       #ifdef OUTPUT_READABLE_ACCELGYRO
         // display tab-separated accel/gyro x/y/z values
-        Serial.print("a/g:\t");
-        Serial.print(ax); Serial.print(",");
-        Serial.print(ay); Serial.print(",");
-        Serial.print(az); Serial.print(",");
-        Serial.print(gx); Serial.print(",");
-        Serial.print(gy); Serial.print(",");
-        Serial.print(gz); Serial.print("\n");
+        Serial.print("$");Serial.print("\t");
+        Serial.print(ax); Serial.print("\t");
+        Serial.print(ay); Serial.print("\t");
+        Serial.print(az); Serial.print("\t");
+        Serial.print(gx); Serial.print("\t");
+        Serial.print(gy); Serial.print("\t");
+        Serial.print(gz); Serial.print("\t");
+        Serial.print("\n");
       #endif
 
       #ifdef OUTPUT_BINARY_ACCELGYRO
@@ -157,6 +159,7 @@ void loop() {
       blinkState = !blinkState;
       digitalWrite(LED_PIN, blinkState);
     }
+    delay(5);
 
     
 
