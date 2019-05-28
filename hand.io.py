@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import time
 import struct
+import json
 
 import serial
 from serial import tools
@@ -13,7 +14,8 @@ from sklearn.neighbors import KNeighborsClassifier
 
 baud = 115200
 algorithm = "knn"
-dataset_path = "handio_data.csv"
+dataset_path = "dataset.csv"
+commands_path = "command.json"
 
 class Classifier():
     result = None
@@ -42,7 +44,7 @@ class Classifier():
 class SerialObject():
     port = None
     ser = None
-    data = None
+    data = ".\n"
 
     def __init__(self, baud):
         self.baud = baud
@@ -52,7 +54,7 @@ class SerialObject():
         print("Serial port:", self.port)
         print("Baud:", baud)
 
-        self.ser = serial.Serial(self.port, baud)
+        self.ser = serial.Serial(self.port, baud, timeout=0.5)
     
     def __getPort(self):
         serial.tools.list_ports.grep
@@ -78,52 +80,74 @@ class SerialObject():
         return self.data
 
     def updateData(self):
-        self.data = self.checkedOutputText()
+        data = self.checkedOutput()
+
+        if data == None:
+            return
+            
+        self.data = data
+        
 
     def showData(self):
         print(self.data)
     
 
-    def checkedOutputText(self):
+    def checkedOutput(self):
         self.__flushSerial()
+        
         data = self.ser.readline().decode("utf-8")
 
         if data[:1] == "$" and data[-1:] == "\n":
             sensor_data = data.split("\t")[1:-1]
             return (sensor_data)
+        elif data[:1] == ".":
+            print ("No")
 
-    def dumpOutputText(self):
+    def dumpOutput(self):
         self.__flushSerial()
         print(self.ser.readline().decode("utf-8"))
-    
-    def checkedOutputBin(self):
-        self.__flushSerial()
-        data = self.ser.readline()
-
-        if data[:1] == b"$" and data[-1:] == b"\n":
-            print(data)
-
-    def dumpOutputBin(self):
-        self.__flushSerial()
-        print(self.ser.readline())
 
     def serialClose(self):
         self.ser.close()
+        
+class HandIO():
+    sensor = None
+    actuator =  None
+    classifier = None
+    command = None
+
+    def __init__(self, serial, classifier, commands):
+        self.sensor = serial
+        self.classifier = classifier
+        self.__loadJson(commands)
+
+    def init(self):
+        while 1:
+            try:
+                print(self.sensor.checkedOutput())
+            except:
+                print("Keyboard Interrupt")
+                break
+            
+    def __loadJson(self, file_path):
+        with open(file_path, "r") as json_file:
+            self.command = json.load(json_file)
+        
+    def chooseDevice(self):
+        print("coiso")
+
+    def chooseAction(self):
+        print("coiso")
+
+    def soundSignal(self):
+        print("OK")
 
 def main():
     ser = SerialObject(baud)
     clf = Classifier(dataset_path, algorithm)
-
-    while 1:
-        try:
-            ser.updateData()
-            ser.showData()
-        except:
-            ser.serialClose()
-            clf.classify(ser.getData())
-            print("\n",pd.DataFrame(ser.getData()).T)
-            print("keyboard interrupt")
-            break
+    hio = HandIO(ser, clf, commands_path)
+    
+    hio.init()
 
 if __name__ == '__main__':
     main()
