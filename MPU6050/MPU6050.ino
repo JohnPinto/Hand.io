@@ -67,7 +67,7 @@ int16_t gx, gy, gz;
 
 
 #define LED_PIN 13
-#define BUTTON_PIN 3
+#define BUTTON_PIN 12
 int buttonState = 0;
 bool blinkState = false;
 uint8_t packet[8] = { '$', 0, 0, 0, 0, 0, 0,'\n' };
@@ -158,10 +158,10 @@ void loop() {
       // blink LED to indicate activity
       blinkState = !blinkState;
       digitalWrite(LED_PIN, blinkState);
-    }
-    delay(5);
-
+    } else
+      Serial.print(".\n");
     
+    delay(5);  
 
     
 }
