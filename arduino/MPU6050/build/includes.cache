@@ -1,0 +1,47 @@
+[
+  {
+    "Sourcefile": "",
+    "Include": "",
+    "Includepath": "/home/johnpinto/.arduino15/packages/arduino/hardware/avr/1.6.23/cores/arduino"
+  },
+  {
+    "Sourcefile": "",
+    "Include": "",
+    "Includepath": "/home/johnpinto/.arduino15/packages/arduino/hardware/avr/1.6.23/variants/standard"
+  },
+  {
+    "Sourcefile": "/home/johnpinto/Documentos/handio/handio_local/MPU6050/build/sketch/MPU6050.ino.cpp",
+    "Include": "I2Cdev.h",
+    "Includepath": "/home/johnpinto/Documentos/Arduino/libraries/MPU6050/src"
+  },
+  {
+    "Sourcefile": "/home/johnpinto/Documentos/handio/handio_local/MPU6050/build/sketch/MPU6050.ino.cpp",
+    "Include": "Wire.h",
+    "Includepath": "/home/johnpinto/.arduino15/packages/arduino/hardware/avr/1.6.23/libraries/Wire/src"
+  },
+  {
+    "Sourcefile": "/home/johnpinto/Documentos/handio/handio_local/MPU6050/build/sketch/MPU6050.ino.cpp",
+    "Include": "",
+    "Includepath": ""
+  },
+  {
+    "Sourcefile": "/home/johnpinto/Documentos/Arduino/libraries/MPU6050/src/I2Cdev.cpp",
+    "Include": "",
+    "Includepath": ""
+  },
+  {
+    "Sourcefile": "/home/johnpinto/Documentos/Arduino/libraries/MPU6050/src/MPU6050.cpp",
+    "Include": "",
+    "Includepath": ""
+  },
+  {
+    "Sourcefile": "/home/johnpinto/.arduino15/packages/arduino/hardware/avr/1.6.23/libraries/Wire/src/Wire.cpp",
+    "Include": "",
+    "Includepath": ""
+  },
+  {
+    "Sourcefile": "/home/johnpinto/.arduino15/packages/arduino/hardware/avr/1.6.23/libraries/Wire/src/utility/twi.c",
+    "Include": "",
+    "Includepath": ""
+  }
+]
