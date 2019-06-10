@@ -18,7 +18,7 @@ scores_list = []
 # prepare configuration for cross validation test harness
 # seed = 100
 
-balance_data = pd.read_csv('handio_data.csv',header=None)
+balance_data = pd.read_csv('datasets/dataset.csv',header=None)
 #print(balance_data)
 
 # Feature set

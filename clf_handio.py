@@ -21,7 +21,7 @@ from sklearn.ensemble import GradientBoostingClassifier
 # prepare configuration for cross validation test harness
 seed = 100
 
-balance_data = pd.read_csv('handio_data.csv',
+balance_data = pd.read_csv('datasets/dataset.csv',
                            sep=',',
                            header=None)
 

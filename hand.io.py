@@ -23,9 +23,9 @@ class HandIO():
     __mixer = mx
     __ircodes = None
 
-    def __init__(self, sensor, actuator, classifier, commands = "../json/commands.json", 
-                                                     sounds   = "../json/sounds.json", 
-                                                     ircodes  = "../json/ircodes.json"):
+    def __init__(self, sensor, actuator, classifier, commands = "json/commands.json", 
+                                                     sounds   = "json/sounds.json", 
+                                                     ircodes  = "json/ircodes.json"):
         self.__sensor = sensor
         self.__actuator = actuator
         self.__classifier = classifier

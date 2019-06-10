@@ -12,7 +12,7 @@ class SerialObject():
     def __init__(self, baud, device):
         self.baud = baud
         
-        self.__loadDevices("../json/devices.json")
+        self.__loadDevices("json/devices.json")
 
         self.__getPort(device)
 

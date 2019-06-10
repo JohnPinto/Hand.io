@@ -11,7 +11,7 @@ class Classifier():
     __dataset_x = None
     __dataset_y = None
 
-    def __init__(self, algorithm, dataset = "../datasets/dataset.csv"):
+    def __init__(self, algorithm, dataset = "datasets/dataset.csv"):
         self.__algorithm = algorithm
 
         self.__dataset = pd.read_csv(dataset, header=None)
