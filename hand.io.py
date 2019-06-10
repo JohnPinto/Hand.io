@@ -61,7 +61,7 @@ class HandIO():
                 self.__sensor.serialClose()
                 break
 
-    def record(self, command):
+    def record(self, command, dataset = "datasets/dataset.new.csv"):
         while 1:
             try:
                 self.__waitSignal()
