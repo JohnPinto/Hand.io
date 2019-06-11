@@ -52,7 +52,7 @@ class SerialObject():
         self.__serial.close()
 
     def send(self, data):
-        self.__serial.write(data)
+        self.__serial.write(data.encode())
 
 class Sensor(SerialObject):
 

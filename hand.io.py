@@ -55,6 +55,8 @@ class HandIO():
 
                 self.__soundSignal()
 
+                self.__sendCommand()
+
                 self.__cleanSelection()
             except:
                 print("Keyboard Interrupt")
@@ -145,7 +147,7 @@ class HandIO():
         self.__action = None
 
     def __sendCommand(self):
-        return True
+        self.__actuator.send(self.__ircodes[self.__action])
 
 
 def main():
