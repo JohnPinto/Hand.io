@@ -2,6 +2,7 @@
 import time
 import struct
 import json
+import math
 
 from pygame import mixer as mx
 
@@ -63,14 +64,44 @@ class HandIO():
                 self.__sensor.serialClose()
                 break
 
-    def record(self, command, dataset = "datasets/dataset.new.csv"):
+    def record(self, dataset = "datasets/dataset.new.csv"):
         while 1:
             try:
-                self.__waitSignal()
+                command = input("Input data class for next 10 readings: ")
+                i = 0
+                while i < 10:
+                    n = self.__ordinal(i+1)
+                    print("%s Reading of %s data class" % (n, command))
+                    self.__waitSignal()
+                    self.__storeRecord(command, dataset)
+                    i += 1
             except:
                 print("Keyboard Interrupt")
                 self.__sensor.serialClose()
                 break
+
+    def __storeRecord(self, command, dataset):
+        with open(dataset, "a") as file:
+            record = str(command) + "," + ",".join(self.__data)
+            print(record)
+            file.write(record + "\n")
+        file.close()
+
+    def __ordinal(self, value):
+        if value % 100//10 != 1:
+            if value % 10 == 1:
+                ordval = u"%d%s" % (value, "st")
+            elif value % 10 == 2:
+                ordval = u"%d%s" % (value, "nd")
+            elif value % 10 == 3:
+                ordval = u"%d%s" % (value, "rd")
+            else:
+                ordval = u"%d%s" % (value, "th")
+        else:
+            ordval = u"%d%s" % (value, "th")
+
+        return ordval
+
 
             
     def __loadCommands(self, file_path):
@@ -157,8 +188,8 @@ def main():
     time.sleep(1)
     hio = HandIO(sensor, actuator, clf)
     
-    hio.init()
-    
+    #hio.init()
+    hio.record()
 if __name__ == '__main__':
     main()
 
