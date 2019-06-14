@@ -61,13 +61,13 @@ void sendIR(int cod){
             irsend.sendRaw(irBuffer, code_size[1], freq);  
             delay(100);
             break;
-        case 2:
+        case 1:
             Serial.println("AC ON");
             memcpy_P(irBuffer, &ac_codes[1][0], code_size[0] * 2); 
             irsend.sendRaw(irBuffer, code_size[0], freq);
             delay(100);
             break;
-        case 3:
+        case 2:
             Serial.println("AC OFF");
             memcpy_P(irBuffer, &ac_codes[0][0], code_size[0] * 2); 
             irsend.sendRaw(irBuffer, code_size[0], freq);
