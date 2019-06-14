@@ -10,6 +10,8 @@ from classifier import Classifier
 
 from in_out import Sensor, Actuator
 
+from pynput.keyboard import Key, Controller
+
 
 class HandIO():
     __sensor = None
@@ -23,6 +25,7 @@ class HandIO():
     __sounds = None
     __mixer = mx
     __ircodes = None
+    __keyboard = Controller()
 
     def __init__(self, sensor, actuator, classifier, commands = "json/commands.json", 
                                                      sounds   = "json/sounds.json", 
@@ -154,7 +157,7 @@ class HandIO():
 
 
     def __chooseAction(self, result):
-        if result in self.__commands and self.__device is not None:
+        if result in self.__commands[self.__device] and self.__device is not None:
             self.__action = self.__commands[self.__device][result]
             print (self.__action)
             return True
@@ -164,6 +167,8 @@ class HandIO():
             return False
 
     def __soundSignal(self):
+        if self.__device == "kb":
+            return
         if self.__device is not None and self.__action is None:
             self.__loadAndPlay(self.__sounds[self.__device])
         elif self.__device is not None and self.__action is not None:
@@ -178,18 +183,28 @@ class HandIO():
         self.__action = None
 
     def __sendCommand(self):
-        self.__actuator.send(self.__ircodes[self.__action])
+        if self.__device != "kb":
+            self.__actuator.send(self.__ircodes[self.__action])
+        else:
+            self.__keyboard.press(self.__selectKey())
+            self.__keyboard.release(self.__selectKey())
+
+    def __selectKey(self):
+        if self.__action == "kb_right":
+            return Key.right
+        elif self.__action == "kb_left":
+            return Key.left
 
 
 def main():
     sensor = Sensor()
     actuator = Actuator()
-    clf = Classifier("knn")
+    clf = Classifier("knn","datasets/dataset.new.csv")
     time.sleep(1)
     hio = HandIO(sensor, actuator, clf)
     
-    #hio.init()
-    hio.record()
+    hio.init()
+    #hio.record()
 if __name__ == '__main__':
     main()
 

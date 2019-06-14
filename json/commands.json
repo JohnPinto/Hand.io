@@ -1,12 +1,17 @@
 {
-    "u" : "ac",
-    "d" : "tv",
+    "a" : "ac",
+    "b" : "tv",
+    "c" : "kb",
     "ac" : {
-        "u" : "ac_on",
-        "d" : "ac_off"
+        "a" : "ac_on",
+        "b" : "ac_off"
     },
     "tv" : {
-        "u" : "tv_on",
-        "d" : "tv_off"
+        "a" : "tv_on",
+        "b" : "tv_off"
+    },
+    "kb" : {
+        "c" : "kb_right",
+        "d" : "kb_left"
     }
 }
