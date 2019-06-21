@@ -1,10 +1,11 @@
 import json
 import serial
+from abc import ABC
 from serial import tools
 from serial.tools import list_ports
 
 
-class SerialObject():
+class SerialObject(ABC):
     __port = None
     __serial = None
     __devices =  None
@@ -44,22 +45,22 @@ class SerialObject():
         self.__serial.reset_input_buffer()
         self.__serial.reset_output_buffer()
 
-    def read(self):
-        self.__flushSerial()
-        return(self.__serial.readline().decode("utf-8"))
-
     def serialClose(self):
         self.__serial.close()
-
-    def send(self, data):
-        self.__serial.write(data.encode())
-
+ 
 class Sensor(SerialObject):
 
     def __init__(self, baud = 115200, device = "sensor"):
         super().__init__(baud, device)
+    
+    def read(self):
+        self.__flushSerial()
+        return(self.__serial.readline().decode("utf-8"))
 
 class Actuator(SerialObject):
 
     def __init__(self, baud = 57600, device = "actuator"):
         super().__init__(baud, device)
+
+    def send(self, data):
+        self.__serial.write(data.encode())
