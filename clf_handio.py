@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import time
 
 from sklearn import model_selection
 from sklearn.model_selection import learning_curve
@@ -19,9 +20,9 @@ from sklearn.ensemble import GradientBoostingClassifier
 # from sklearn.ensemble import VotingClassifier
 
 # prepare configuration for cross validation test harness
-seed = 100
+seed = int(round(time.time() * 1000))
 
-balance_data = pd.read_csv('datasets/dataset.csv',
+balance_data = pd.read_csv('datasets/dataset.new.csv',
                            sep=',',
                            header=None)
 
