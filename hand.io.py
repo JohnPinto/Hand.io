@@ -19,7 +19,6 @@ class HandIO():
     __classifier = None
     __commands = None
     __data = None
-    __state = 0
     __device = None
     __action = None
     __sounds = None
@@ -199,7 +198,7 @@ class HandIO():
 def main():
     sensor = Sensor()
     actuator = Actuator()
-    clf = Classifier("knn","datasets/dataset.new.csv")
+    clf = Classifier("nb","datasets/dataset.new.csv")
     time.sleep(1)
     hio = HandIO(sensor, actuator, clf)
     
