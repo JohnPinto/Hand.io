@@ -1,14 +1,15 @@
 import pandas as pd
 
-# import numpy as np
-# import matplotlib.pyplot as plt
-# from sklearn.metrics import classification_report, \
-#        confusion_matrix, \
-#        accuracy_score
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.metrics import classification_report, \
+       confusion_matrix, \
+        accuracy_score
 
 from sklearn import model_selection
 from sklearn import metrics
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.naive_bayes import GaussianNB
 
 k = 4
 k_range = range(1,26)
@@ -18,7 +19,7 @@ scores_list = []
 # prepare configuration for cross validation test harness
 # seed = 100
 
-balance_data = pd.read_csv('datasets/dataset.csv',header=None)
+balance_data = pd.read_csv('datasets/dataset.new.csv',header=None)
 #print(balance_data)
 
 # Feature set
@@ -36,6 +37,11 @@ X_train, X_test, Y_train, Y_test = model_selection.train_test_split(X, Y, test_s
 
 # classifier
 
+nb_clf = GaussianNB().fit(X_train, Y_train)
+Y_pred = nb_clf.predict(X_test)
+score = metrics.accuracy_score(Y_test, Y_pred)
+print(score)
+
 for k in k_range:
     clf = KNeighborsClassifier(n_neighbors = k).fit(X_train, Y_train)
     Y_pred = clf.predict(X_test)
@@ -43,12 +49,6 @@ for k in k_range:
     print("k= {} \t {}".format(k, scores[k]))
     scores_list.append(metrics.accuracy_score(Y_test,Y_pred))
 
-#plt.plot(k_range, scores_list)
-#plt.xlabel("Quantidade de k")
-#plt.ylabel("Precisão")
-#plt.Text(0, 0.5, "Teste de precisão")
-#plt.show()
-    
 
 
 #kfold = model_selection.KFold(n_splits=10, random_state=seed)
