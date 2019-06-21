@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn import model_selection
 from sklearn import metrics
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.naive_bayes import GaussianNB
 
 class Classifier():
     __result = None
@@ -21,7 +22,9 @@ class Classifier():
 
         if self.__algorithm == "knn":
             self.__clf = KNeighborsClassifier(n_neighbors=4).fit(self.__dataset_x,self.__dataset_y)
+        elif self.__algorithm == "nb":
+            self.__clf =  GaussianNB().fit(self.__dataset_x,self.__dataset_y)
 
-    def classify(self,data):
+    def classify(self, data):
         self.__result = self.__clf.predict(pd.DataFrame(data).T)
         return(self.__result[0])
