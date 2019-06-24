@@ -61,8 +61,8 @@ class HandIO():
                 self.__sendCommand()
 
                 self.__cleanSelection()
-            except:
-                print("Keyboard Interrupt")
+            except KeyboardInterrupt as e:
+                print(e.with_traceback)
                 self.__sensor.serialClose()
                 break
 
