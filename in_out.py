@@ -6,47 +6,47 @@ from serial.tools import list_ports
 
 
 class SerialObject(ABC):
-    __port = None
-    __serial = None
-    __devices =  None
+    _port = None
+    _serial = None
+    _devices =  None
 
     def __init__(self, baud, device):
         self.baud = baud
         
-        self.__loadDevices("json/devices.json")
+        self._loadDevices("json/devices.json")
 
-        self.__getPort(device)
-
-        print("Serial port:", self.__port)
+        self._getPort(device)
+    
+        print("Serial port:", self._port)
         print("Baud:", baud)
 
-        self.__serial = serial.Serial(self.__port, baud)
+        self._serial = serial.Serial(self._port, baud)
     
-    def __getPort(self, device):
+    def _getPort(self, device):
         try:
             search = serial.tools.list_ports.grep(True)
             next(search)
         except Exception:
             port_list = serial.tools.list_ports.comports()
             for p in port_list:
-                if self.__devices[device] in p.serial_number:
-                    self.__port = p.device
+                if self._devices[device] in p.serial_number:
+                    self._port = p.device
                     break
             else:
-                    self.__port = port_list[-1].device
+                    self._port = port_list[-1].device
 
-    def __loadDevices(self, file_path):
+    def _loadDevices(self, file_path):
         with open(file_path, "r") as json_file:
-            self.__devices = json.load(json_file)
+            self._devices = json.load(json_file)
         json_file.close()
 
-    def __flushSerial(self):
-        self.__serial.flush()
-        self.__serial.reset_input_buffer()
-        self.__serial.reset_output_buffer()
+    def _flushSerial(self):
+        self._serial.flush()
+        self._serial.reset_input_buffer()
+        self._serial.reset_output_buffer()
 
     def serialClose(self):
-        self.__serial.close()
+        self._serial.close()
  
 class Sensor(SerialObject):
 
@@ -54,8 +54,8 @@ class Sensor(SerialObject):
         super().__init__(baud, device)
     
     def read(self):
-        self.__flushSerial()
-        return(self.__serial.readline().decode("utf-8"))
+        self._flushSerial()
+        return(self._serial.readline().decode("utf-8"))
 
 class Actuator(SerialObject):
 
@@ -63,4 +63,4 @@ class Actuator(SerialObject):
         super().__init__(baud, device)
 
     def send(self, data):
-        self.__serial.write(data.encode())
+        self._serial.write(data.encode())
