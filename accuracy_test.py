@@ -33,7 +33,7 @@ Y = balance_data.values[:, 0]
 # Y = dataset('Class')
 
 # Split data
-X_train, X_test, Y_train, Y_test = model_selection.train_test_split(X, Y, test_size=0.2, random_state=7)
+X_train, X_test, Y_train, Y_test = model_selection.train_test_split(X, Y, test_size=0.2, random_state=100)
 
 # classifier
 
@@ -42,12 +42,12 @@ Y_pred = nb_clf.predict(X_test)
 score = metrics.accuracy_score(Y_test, Y_pred)
 print(score)
 
-#for k in k_range:
-#    clf = KNeighborsClassifier(n_neighbors = k).fit(X_train, Y_train)
-#    Y_pred = clf.predict(X_test)
-#    scores[k] = metrics.accuracy_score(Y_test,Y_pred)
-#    print("k= {} \t {}".format(k, scores[k]))
-#    scores_list.append(metrics.accuracy_score(Y_test,Y_pred))
+for k in k_range:
+    clf = KNeighborsClassifier(n_neighbors = k).fit(X_train, Y_train)
+    Y_pred = clf.predict(X_test)
+    scores[k] = metrics.accuracy_score(Y_test,Y_pred)
+    print("k= {} \t {}".format(k, scores[k]))
+    scores_list.append(metrics.accuracy_score(Y_test,Y_pred))
 
 
 
