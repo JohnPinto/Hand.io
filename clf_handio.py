@@ -18,6 +18,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 # from sklearn.ensemble import VotingClassifier
+from matplotlib.ticker import FuncFormatter
 
 # prepare configuration for cross validation test harness
 seed = int(round(time.time() * 1000))
@@ -39,10 +40,10 @@ models.append(('LDA', LinearDiscriminantAnalysis()))
 models.append(('KNN', KNeighborsClassifier()))
 models.append(('CART', DecisionTreeClassifier()))
 models.append(('NB', GaussianNB()))
-models.append(('SVM', SVC()))
+models.append(('SVM', SVC(gamma='scale')))
 models.append(('ADB', AdaBoostClassifier()))
-models.append(('RFC', RandomForestClassifier()))
-models.append(('ETC', ExtraTreesClassifier()))
+models.append(('RFC', RandomForestClassifier(n_estimators=100)))
+models.append(('ETC', ExtraTreesClassifier(n_estimators=100)))
 models.append(('GBC', GradientBoostingClassifier()))
 
 
@@ -92,56 +93,68 @@ train_scores_std = np.std(train_scores, axis=1)
 test_scores_mean = np.mean(test_scores, axis=1)
 test_scores_std = np.std(test_scores, axis=1)
 
-plt.figure()
-plt.title(names[pd.Series(cv_means).idxmax()])
-plt.legend(loc="best")
-plt.xlabel("Training examples")
-plt.ylabel("Score")
-plt.gca().invert_yaxis()
+fig, (ax1, ax2) = plt.subplots(2, 1)
+fig.subplots_adjust(hspace=0.8)
+
+
+"""
+boxplot algorithm comparison
+"""
+
+ax1.set_title('Comparação dos algoritmos')
+ax1.boxplot(results)
+ax1.set_xticklabels(names)
+
+ax2.set_title(names[pd.Series(cv_means).idxmax()])
+ax2.legend(loc="best")
+ax2.set_xlabel("Tamaho do dataset")
+ax2.set_ylabel("Acurácia")
+ax2.invert_yaxis()
 
 # box-like grid
-plt.grid()
+ax2.grid()
 
 # plot the std deviation as a transparent range at each training set size
-plt.fill_between(train_sizes,
+ax2.fill_between(train_sizes,
                  train_scores_mean - train_scores_std,
                  train_scores_mean + train_scores_std,
                  alpha=0.1,
                  color="r")
 
-plt.fill_between(train_sizes,
+ax2.fill_between(train_sizes,
                  test_scores_mean - test_scores_std,
                  test_scores_mean + test_scores_std,
                  alpha=0.1,
                  color="g")
 
 # plot the average training and test score lines at each training set size
-plt.plot(train_sizes,
+ax2.plot(train_sizes,
          train_scores_mean,
          'o-',
          color="r",
-         label="Training score")
+         label="Pontuação de treino")
 
-plt.plot(train_sizes,
+ax2.plot(train_sizes,
          test_scores_mean,
          'o-',
          color="g",
-         label="Cross-validation score")
+         label="Cross-Validação")
+
+ax2.annotate("%.1f%%" % (train_scores_mean[-1] * 100),
+             xy=(train_sizes[-1], train_scores_mean[-1]),
+             xytext=(5, 0), textcoords='offset points', va='center')
+
+ax2.annotate("%.1f%%" % (test_scores_mean[-1] * 100),
+             xy=(train_sizes[-1], test_scores_mean[-1]),
+             xytext=(5, 0), textcoords='offset points', va='center')
 
 # sizes the window for readability and displays the plot
 # shows error from 0 to 1.1
-plt.ylim(-.1, 1.1)
-# plt.xlabel("Training Set Size"), plt.ylabel("Accuracy Score"),
-plt.legend(loc="best")
-plt.show()
-
-"""
-boxplot algorithm comparison
-"""
-
-fig = plt.figure()
-fig.suptitle('Algorithm Comparison')
-ax = fig.add_subplot(111)
-plt.boxplot(results)
-ax.set_xticklabels(names)
+ax2.set_ylim(-.1, 1.1)
+ax2.set_xlim(0, train_sizes[-1] + 15)
+ax2.set_xlabel("Tamanho do dataset")
+ax2.set_xticks(train_sizes)
+ax2.set_ylabel("Acurácia")
+ax2.legend(loc="best")
+ax2.yaxis.set_major_formatter(FuncFormatter(lambda y, _: '{:.0%}'.format(y))) 
 plt.show()
