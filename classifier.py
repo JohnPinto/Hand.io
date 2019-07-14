@@ -1,6 +1,4 @@
 import pandas as pd
-from sklearn import model_selection
-from sklearn import metrics
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
 

@@ -1,21 +1,18 @@
 #!/usr/bin/env python
 import time
-import struct
 import json
-import math
 
 from pygame import mixer as mx
+
+from pynput.keyboard import Key, Controller
 
 from classifier import Classifier
 
 from in_out import Sensor, Actuator
 
-from pynput.keyboard import Key, Controller
-
-
 class HandIO():
     __sensor = None
-    __actuator =  None
+    __actuator = None
     __classifier = None
     __commands = None
     __data = None
@@ -26,8 +23,8 @@ class HandIO():
     __ircodes = None
     __keyboard = Controller()
 
-    def __init__(self, sensor, actuator, classifier, commands = "json/commands.json", 
-                                                     sounds   = "json/sounds.json", 
+    def __init__(self, sensor, actuator, classifier, commands = "json/commands.json",
+                                                     sounds   = "json/sounds.json",
                                                      ircodes  = "json/ircodes.json"):
         self.__sensor = sensor
         self.__actuator = actuator
@@ -46,7 +43,7 @@ class HandIO():
                 if self.__chooseDevice(self.__classify()) == False:
                     self.__cleanSelection()
                     continue
-                
+
                 self.__soundSignal()
 
                 print("Choose an Action")
@@ -104,8 +101,6 @@ class HandIO():
 
         return ordval
 
-
-            
     def __loadCommands(self, file_path):
         with open(file_path, "r") as json_file:
             self.__commands = json.load(json_file)
@@ -134,7 +129,7 @@ class HandIO():
         if self.__data is not None:
             return self.__classifier.classify(self.__data)
         else:
-            return ("Unable to classify due to lack of data")
+            return "Unable to classify due to lack of data"
 
     def __processSerial(self, data):
         if data[:1] == "$" and data[-1:] == "\n":
@@ -143,7 +138,7 @@ class HandIO():
             return sensor_data
         else:
             return "."
-        
+
     def __chooseDevice(self, result):
         if result in self.__commands:
             self.__device = self.__commands[result]
@@ -158,7 +153,7 @@ class HandIO():
     def __chooseAction(self, result):
         if result in self.__commands[self.__device] and self.__device is not None:
             self.__action = self.__commands[self.__device][result]
-            print (self.__action)
+            print(self.__action)
             return True
         else:
             print(result)
@@ -176,7 +171,7 @@ class HandIO():
     def __loadAndPlay(self, file):
         self.__mixer.music.load(file)
         self.__mixer.music.play()
-    
+
     def __cleanSelection(self):
         self.__device = None
         self.__action = None
@@ -198,12 +193,11 @@ class HandIO():
 def main():
     sensor = Sensor()
     actuator = Actuator()
-    clf = Classifier("nb","datasets/dataset.new.csv")
+    clf = Classifier("nb", "datasets/dataset.new.csv")
     time.sleep(1)
     hio = HandIO(sensor, actuator, clf)
-    
+
     hio.init()
     #hio.record()
 if __name__ == '__main__':
     main()
-
